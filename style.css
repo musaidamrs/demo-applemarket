@@ -145,3 +145,18 @@ html{overflow-x:clip}
 [data-theme=dark] .hero p{color:#647084}
 [data-theme=dark] .hero .video-toggle{background:#ffffffcf;color:#465162}
 .theme-toggle[aria-pressed=true]{color:#fff}
+/* Keep keyboard focus visible without Safari's automatic ring after a touch. */
+html:not(.keyboard-navigation) [data-close]:focus{outline:none!important;box-shadow:none!important}
+[data-close],.dialog-top [data-close]:hover{background:transparent!important}
+.cards .card{box-shadow:0 2px 12px #1824400c;outline:1px solid #d9dde4}
+[data-theme=dark] .cards .card{outline-color:#36363c}
+@media(max-width:760px){
+html.ios-safari .dock{bottom:0}
+.card-track{will-change:auto}
+.product-copy::before,.info-page::before,.section-title::before,.breadcrumbs::before,.page-heading::before,.lead::before,.hero-copy::before{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.editorial,.specs,.summary,.info-page,.footer,.catalog-search{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+dialog::backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:#1b20314a}
+.dock,.header-actions,.header .top-control,dialog{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.pill,.add-btn,.chip.active,.chat-form button{animation:none;background-size:100% 100%}
+.card:hover{transform:none}.card{transition:none}
+}

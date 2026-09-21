@@ -44,38 +44,22 @@ function closePanel(dialog){if(!dialog||!dialog.open||dialog.dataset.closing)ret
 $$('dialog').forEach(d=>d.addEventListener('cancel',e=>{e.preventDefault();closePanel(d)}));
 // Decorative binary rain: fixed behind content, never captures input.
 (function matrixRain(){
- const canvas=$('#matrix');if(!canvas)return;const ctx=canvas.getContext('2d');if(!ctx)return;
- let width=0,height=0,columns=[],raf=0,last=0;
- function resize(){width=innerWidth;height=innerHeight;const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=width*dpr;canvas.height=height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);const gap=width<760?29:36;columns=Array.from({length:Math.ceil(width/gap)},(_,i)=>({x:i*gap+9,offset:(i*211)%Math.max(height,1),speed:21+(i%7)*7,seed:i*17,trail:10+i%9,depth:i%3}));draw(performance.now())}
- function draw(t){
-  const time=t/1000;ctx.clearRect(0,0,width,height);
-  for(const col of columns){
-   const size=col.depth===0?10:col.depth===1?12:14;ctx.font=`${size}px ui-monospace, SFMono-Regular, monospace`;
-   const step=size+9;const y=((motionPreference.matches?0:time)*col.speed+col.offset)%(height+col.trail*step)-col.trail*step;
-   const x=col.x+Math.sin(time*.32+col.seed)*3;
-   for(let j=0;j<col.trail;j++){
-    const yy=y+j*step;if(yy< -20||yy>height+20)continue;
-    const progress=j/(col.trail-1);const wave=(Math.sin(time*.8+col.seed*.27+j*.33)+1)/2;
-    const from=Math.round(55+wave*151);const to=Math.round(235-wave*122);
-    const dark=document.documentElement.dataset.theme==='dark';
-    const gradient=ctx.createLinearGradient(x,yy-size,x+size,yy+4);
-    if(!dark){gradient.addColorStop(0,`rgba(${from},${from},${from},${(.11+progress*.33)*(col.depth===0?.7:1)})`);
-    gradient.addColorStop(.5,`rgba(${Math.round((from+to)/2)},${Math.round((from+to)/2)},${Math.round((from+to)/2)},${.12+progress*.29})`);
-    gradient.addColorStop(1,`rgba(${to},${to},${to},${.1+progress*.25})`);
-    }else{gradient.addColorStop(0,`rgba(30,${Math.round(95+wave*65)},255,${.3+progress*.5})`);gradient.addColorStop(.5,`rgba(45,${Math.round(145+wave*55)},255,${.35+progress*.5})`);gradient.addColorStop(1,`rgba(65,125,255,${.25+progress*.45})`)}
-    ctx.fillStyle=gradient;ctx.shadowColor=dark?'rgba(40,125,255,.65)':progress>.85?'rgba(255,255,255,.6)':'transparent';ctx.shadowBlur=progress>.85?5:0;
-    const tick=Math.floor(time*(col.depth===0?.7:1.4)+j*.23);ctx.fillText(((col.seed+j*7+tick)%5)<2?'1':'0',x,yy);
-   }
-  }
-  ctx.shadowBlur=0;
- }
- function frame(t){if(t-last>36){draw(t);last=t}raf=requestAnimationFrame(frame)}
- function start(){cancelAnimationFrame(raf);if(!document.hidden&&!motionPreference.matches)raf=requestAnimationFrame(frame);else draw(0)}
- addEventListener('resize',resize,{passive:true});document.addEventListener('visibilitychange',start);motionPreference.addEventListener('change',start);resize();start();
+ const canvas=$('#matrix'),ctx=canvas?.getContext('2d');if(!ctx)return;
+ let width=0,height=0,columns=[],raf=0,last=0,scrolling=false,timer,atlas=[];
+ const mobile=matchMedia('(max-width:760px)');
+ function sprites(){atlas=[];const dark=document.documentElement.dataset.theme==='dark';for(let k=0;k<12;k++){const c=document.createElement('canvas');c.width=32;c.height=44;const g=c.getContext('2d');g.font='28px monospace';const gradient=g.createLinearGradient(0,0,24,40);gradient.addColorStop(0,dark?`hsl(${210+k*2} 100% 66%)`:`hsl(0 0% ${24+k*4}%)`);gradient.addColorStop(1,dark?'#2364ff':'#eee');g.fillStyle=gradient;g.fillText(String(k%2),3,32);atlas.push(c)}}
+ function resize(){const w=innerWidth,h=innerHeight;if(w===width&&Math.abs(h-height)<120)return;width=w;height=h;canvas.width=w;canvas.height=h;columns=Array.from({length:Math.ceil(w/(mobile.matches?42:40))},(_,i)=>({x:i*(mobile.matches?42:40),offset:i*193,speed:22+i%5*6,seed:i*7}));draw(performance.now())}
+ function draw(t){ctx.clearRect(0,0,width,height);const time=motionPreference.matches?0:t/1000;for(const col of columns){const y=(time*col.speed+col.offset)%(height+240)-240;for(let j=0;j<10;j++){const yy=y+j*24;if(yy<0||yy>height)continue;ctx.globalAlpha=.16+j*.04;const phase=Math.floor(time*.8+col.seed+j)%12;ctx.drawImage(atlas[phase],col.x,yy,12,17)}}ctx.globalAlpha=1}
+ function frame(t){if(t-last> (mobile.matches?65:40)){draw(t);last=t}raf=requestAnimationFrame(frame)}
+ function start(){cancelAnimationFrame(raf);if(!document.hidden&&!motionPreference.matches&&!scrolling&&!document.querySelector('dialog[open]'))raf=requestAnimationFrame(frame);else if(motionPreference.matches)draw(0)}
+ addEventListener('scroll',()=>{scrolling=true;cancelAnimationFrame(raf);clearTimeout(timer);timer=setTimeout(()=>{scrolling=false;start()},140)},{passive:true});
+ new MutationObserver(()=>{sprites();draw(performance.now());start()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+ new MutationObserver(start).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
+ addEventListener('resize',resize,{passive:true});document.addEventListener('visibilitychange',start);motionPreference.addEventListener('change',start);sprites();resize();start();
 })();
 
 // Keep navigation on the current design version when older preview pages are cached.
-document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(!a||a.target==='_blank')return;const url=new URL(a.href,location.href);if(url.origin===location.origin&&url.pathname.endsWith('.html')){url.searchParams.set('v','apple-market-4');a.href=url.href}},true);
+document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(!a||a.target==='_blank')return;const url=new URL(a.href,location.href);if(url.origin===location.origin&&url.pathname.endsWith('.html')){url.searchParams.set('v','apple-market-5');a.href=url.href}},true);
 
 function galleryFor(p,color=0){return p.gallery?.[color]?.length?p.gallery[color]:[p.colorImages?.[color]||p.image]}
 function colorHex(name){return ({'Star White':'#e8e7e2','Night Sky':'#353b45','Burgundy':'#633441','Glacier':'#acc4cf','Silver':'#cdd0d4','Black':'#292b31','Sky Blue':'#accbdd','Starlight':'#e6dbcc','Midnight':'#343e50','Blue':'#b9cedc','Purple':'#beb9d3','Space Gray':'#7a7f87','White':'#f0f0ee','Space Gray':'#888c96','Light Gold':'#e3cfb3','Dark Bronze':'#6c5b51'})[name]||'#c7cbd4'}
@@ -103,9 +87,9 @@ if(page==='catalog'){
 }
 // The GIF uses a static frame when paused or reduced motion is requested.
 if(page==='home'){
- const gif=$('#hero-gif'),toggle=$('#video-toggle');let paused=motionPreference.matches;
- function syncGif(){gif.src=paused?'assets/iphone-duo-hero-still.jpg':'assets/iphone-duo-hero.gif';toggle.setAttribute('aria-label',paused?'Воспроизвести анимацию':'Приостановить анимацию');toggle.setAttribute('aria-pressed',String(paused));toggle.firstElementChild.textContent=paused?'▶':'Ⅱ'}
- toggle.addEventListener('click',()=>{paused=!paused;syncGif()});motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;syncGif()});syncGif();
+ const gif=$('#hero-gif'),toggle=$('#video-toggle');let paused=motionPreference.matches,visible=true;
+ function syncGif(){const src=paused||!visible||document.hidden||document.querySelector('dialog[open]')?'assets/iphone-duo-hero-still.jpg':'assets/iphone-duo-hero.gif';if(gif.getAttribute('src')!==src)gif.src=src;toggle.setAttribute('aria-label',paused?'Воспроизвести анимацию':'Приостановить анимацию');toggle.setAttribute('aria-pressed',String(paused));toggle.firstElementChild.textContent=paused?'▶':'Ⅱ'}
+ toggle.addEventListener('click',()=>{paused=!paused;syncGif()});motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;syncGif()});new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;syncGif()}).observe(gif);document.addEventListener('visibilitychange',syncGif);new MutationObserver(syncGif).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});syncGif();
 }
 // A persistent theme shared by every page, applied before styles load.
 const themeToggle=$('#theme-toggle');
@@ -117,9 +101,15 @@ const dock=$('.dock');let navDrag=null,suppressNavClick=false;
 function clearNavDrag(){if(navDrag)clearTimeout(navDrag.timer);navDrag=null;dock.classList.remove('scrubbing');$$('.dock-item').forEach(el=>el.classList.remove('scrub-target'))}
 dock.addEventListener('pointerdown',e=>{const item=e.target.closest('.dock-item');if(e.button!==0||!item||!(item.classList.contains('active')||item.getAttribute('aria-expanded')==='true'))return;navDrag={id:e.pointerId,x:e.clientX,y:e.clientY,item,target:item,ready:false};navDrag.timer=setTimeout(()=>{if(!navDrag)return;navDrag.ready=true;dock.setPointerCapture(e.pointerId);dock.classList.add('scrubbing');item.classList.add('scrub-target')},180)});
 dock.addEventListener('pointermove',e=>{const d=navDrag;if(!d||d.id!==e.pointerId)return;if(!d.ready){if(Math.hypot(e.clientX-d.x,e.clientY-d.y)<=10)return;clearTimeout(d.timer);d.ready=true;dock.setPointerCapture(e.pointerId);dock.classList.add('scrubbing')}const hit=document.elementFromPoint(e.clientX,e.clientY)?.closest('.dock-item');d.target=hit&&dock.contains(hit)?hit:null;$$('.dock-item').forEach(el=>el.classList.toggle('scrub-target',el===d.target))});
-dock.addEventListener('pointerup',e=>{if(!navDrag||navDrag.id!==e.pointerId)return;const {ready,target,item}=navDrag;clearNavDrag();if(ready){suppressNavClick=true;setTimeout(()=>suppressNavClick=false,400);if(target&&target!==item){if(target.dataset.open)openPanel(target.dataset.open);else{const url=new URL(target.href);url.searchParams.set('v','apple-market-4');location.assign(url.href)}}}});
+dock.addEventListener('pointerup',e=>{if(!navDrag||navDrag.id!==e.pointerId)return;const {ready,target,item}=navDrag;clearNavDrag();if(ready){suppressNavClick=true;setTimeout(()=>suppressNavClick=false,400);if(target&&target!==item){if(target.dataset.open)openPanel(target.dataset.open);else{const url=new URL(target.href);url.searchParams.set('v','apple-market-5');location.assign(url.href)}}}});
 dock.addEventListener('pointercancel',clearNavDrag);dock.addEventListener('lostpointercapture',clearNavDrag);
 dock.addEventListener('click',e=>{if(suppressNavClick){e.preventDefault();e.stopPropagation();suppressNavClick=false}},true);
 dock.addEventListener('contextmenu',e=>e.preventDefault());
 
 dock.addEventListener('dragstart',e=>e.preventDefault());
+
+// Safari browser chrome already reserves the bottom safe area. Other browsers keep their offset.
+const ua=navigator.userAgent;
+if(/iPhone|iPad|iPod/.test(ua)&&/Safari/.test(ua)&&!/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo/.test(ua)&&!navigator.standalone&&!matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('ios-safari');
+document.addEventListener('pointerdown',()=>document.documentElement.classList.remove('keyboard-navigation'),true);
+document.addEventListener('keydown',e=>{if(e.key==='Tab')document.documentElement.classList.add('keyboard-navigation')},true);
