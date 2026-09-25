@@ -211,3 +211,12 @@ html body :is(.cards .card,.cart-row,.summary,.specs,.info-card,.empty,.product-
 .product-gallery-track{position:absolute;inset:0}.product-gallery-slide{padding:5%}
 
 .search-dialog{transform-origin:top left}
+
+@media(max-width:760px){html.ios-safari .dock{bottom:0}html.ios-safari .header .top-control,html.ios-safari .header-actions{top:calc(12px + env(safe-area-inset-top,0px))}html.ios-safari .header{padding-top:env(safe-area-inset-top,0px);height:calc(77px + env(safe-area-inset-top,0px))}html.ios-safari .container{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+
+/* Chat composer matches the capsule geometry of navigation. */
+html body .chat-form{align-items:center;gap:10px}
+html body .chat-form input{border-radius:999px;min-height:48px;padding:12px 19px;line-height:1.4;appearance:none;-webkit-appearance:none;color:var(--ink)}
+.chat-form button{flex:0 0 48px;width:48px;height:48px;border-radius:50%}
+
+.add-quantity{font-size:20px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}#product-add{min-width:210px}#product-add .add-quantity{font-size:19px}

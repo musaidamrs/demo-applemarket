@@ -62,7 +62,7 @@ $$('dialog').forEach(d=>d.addEventListener('cancel',e=>{e.preventDefault();close
 })();
 
 // Keep navigation on the current design version when older preview pages are cached.
-document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(!a||a.target==='_blank')return;const url=new URL(a.href,location.href);if(url.origin===location.origin&&url.pathname.endsWith('.html')){url.searchParams.set('v','apple-market-14');a.href=url.href}},true);
+document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(!a||a.target==='_blank')return;const url=new URL(a.href,location.href);if(url.origin===location.origin&&url.pathname.endsWith('.html')){url.searchParams.set('v','apple-market-17');a.href=url.href}},true);
 
 function galleryFor(p,color=0){return p.gallery?.[color]?.length?p.gallery[color]:[p.colorImages?.[color]||p.image]}
 function colorHex(name){return ({'Star White':'#e8e7e2','Night Sky':'#353b45','Burgundy':'#633441','Glacier':'#acc4cf','Silver':'#cdd0d4','Black':'#292b31','Sky Blue':'#accbdd','Starlight':'#e6dbcc','Midnight':'#343e50','Blue':'#b9cedc','Purple':'#beb9d3','Space Gray':'#7a7f87','White':'#f0f0ee','Space Gray':'#888c96','Light Gold':'#e3cfb3','Dark Bronze':'#6c5b51'})[name]||'#c7cbd4'}
@@ -107,7 +107,7 @@ const dock=$('.dock');let navDrag=null,suppressNavClick=false;
 function clearNavDrag(){if(navDrag)clearTimeout(navDrag.timer);navDrag=null;dock.classList.remove('scrubbing');$$('.dock-item').forEach(el=>el.classList.remove('scrub-target'));updateDockIndicator()}
 dock.addEventListener('pointerdown',e=>{const item=e.target.closest('.dock-item');if(e.button!==0||!item||!(item.classList.contains('active')||item.getAttribute('aria-expanded')==='true'))return;navDrag={id:e.pointerId,x:e.clientX,y:e.clientY,item,target:item,ready:false};navDrag.timer=setTimeout(()=>{if(!navDrag)return;navDrag.ready=true;dock.setPointerCapture(e.pointerId);dock.classList.add('scrubbing');item.classList.add('scrub-target')},180)});
 dock.addEventListener('pointermove',e=>{const d=navDrag;if(!d||d.id!==e.pointerId)return;if(!d.ready){if(Math.hypot(e.clientX-d.x,e.clientY-d.y)<=10)return;clearTimeout(d.timer);d.ready=true;dock.setPointerCapture(e.pointerId);dock.classList.add('scrubbing')}const hit=document.elementFromPoint(e.clientX,e.clientY)?.closest('.dock-item');d.target=hit&&dock.contains(hit)?hit:null;$$('.dock-item').forEach(el=>el.classList.toggle('scrub-target',el===d.target));if(d.target)moveDockIndicator(d.target)});
-dock.addEventListener('pointerup',e=>{if(!navDrag||navDrag.id!==e.pointerId)return;const {ready,target,item}=navDrag;clearNavDrag();if(ready){suppressNavClick=true;setTimeout(()=>suppressNavClick=false,400);if(target&&target!==item){if(target.dataset.open)openPanel(target.dataset.open);else{const url=new URL(target.href);url.searchParams.set('v','apple-market-14');navigate(url)}}}});
+dock.addEventListener('pointerup',e=>{if(!navDrag||navDrag.id!==e.pointerId)return;const {ready,target,item}=navDrag;clearNavDrag();if(ready){suppressNavClick=true;setTimeout(()=>suppressNavClick=false,400);if(target&&target!==item){if(target.dataset.open)openPanel(target.dataset.open);else{const url=new URL(target.href);url.searchParams.set('v','apple-market-17');navigate(url)}}}});
 dock.addEventListener('pointercancel',clearNavDrag);dock.addEventListener('lostpointercapture',clearNavDrag);
 dock.addEventListener('click',e=>{if(suppressNavClick){e.preventDefault();e.stopPropagation();suppressNavClick=false}},true);
 dock.addEventListener('contextmenu',e=>e.preventDefault());
@@ -148,3 +148,14 @@ function navigate(input,pop=false){
 }
 document.addEventListener('click',e=>{if(e.defaultPrevented||e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const a=e.target.closest('a[href]');if(!a||a.target||a.hasAttribute('download'))return;const url=new URL(a.href,location.href);if(url.origin!==location.origin||url.hash)return;const name=url.pathname.split('/').pop().replace(/\.html$/,'')||'index';if(!routeNames[name])return;e.preventDefault();navigate(url)});
 addEventListener('popstate',()=>navigate(location.href,true));history.scrollRestoration='manual';mountRoute();
+
+// Keep add buttons in sync with the selected configuration and saved cart.
+function syncAddButtons(){
+ const update=(button,p,m,c)=>{if(!button||!p)return;const memory=p.memory[m]||'',color=p.colors[c];const qty=cart.filter(x=>x.id===p.id&&x.memory===memory&&x.color===color).reduce((n,x)=>n+x.qty,0);const state=p.id+'|'+memory+'|'+color+'|'+qty;if(button.dataset.cartState===state)return;const previous=button.dataset.cartQty;button.dataset.cartState=state;button.dataset.cartQty=qty;button.innerHTML=qty?`<span class="add-quantity">${qty}</span>`:button.id==='product-add'?`Добавить в корзину ${icon('plus')}`:icon('plus');button.setAttribute('aria-label',qty?`${p.name}: в корзине ${qty}. Добавить ещё`:`Добавить ${p.name} в корзину`);if(previous!==undefined&&Number(previous)!==qty&&!motionPreference.matches)button.animate([{transform:'scale(.94)'},{transform:'scale(1.06)',offset:.55},{transform:'scale(1)'}],{duration:360,easing:'cubic-bezier(.2,.85,.25,1)'})};
+ $$('[data-add]').forEach(button=>{const p=products.find(p=>p.id===button.dataset.add);update(button,p,0,cardSelections[p?.id]?.color||0)});
+ update($('#product-add'),selectedProduct,selectedMemory,selectedColor);
+}
+new MutationObserver(syncAddButtons).observe($('#main'),{childList:true,subtree:true});
+document.addEventListener('click',()=>queueMicrotask(syncAddButtons));
+addEventListener('storage',event=>{if(event.key==='yabloko-cart'){try{const saved=JSON.parse(event.newValue||'[]');if(Array.isArray(saved)){cart=saved;updateCount();syncAddButtons();if(page==='cart')renderCart()}}catch{}}});
+syncAddButtons();
