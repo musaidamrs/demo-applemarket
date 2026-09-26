@@ -282,11 +282,13 @@ html body .second-row .portrait-banner{width:100%;max-width:none;aspect-ratio:3/
 @media(min-width:1024px){:root{--side:max(48px,calc((100vw - 1600px)/2 + 48px))}.header [data-open=search-dialog]{left:var(--side)}.header-actions{right:var(--side)}}@media(min-width:1024px) and (max-width:1423px){:root{--side:28px}}
 
 /* Navigation and search need a stable contrast layer over product photography. */
-html body .dock{background:linear-gradient(135deg,#ffffff55,transparent 65%),rgba(250,251,253,.84);border-color:#ffffffb3;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
-html[data-theme=dark] body .dock{background:linear-gradient(135deg,#ffffff08,transparent 65%),rgba(32,32,37,.88);border-color:#ffffff25}
+html body nav.dock{background:linear-gradient(135deg,#ffffff18,transparent 65%),rgba(230,233,239,.78)!important;border-color:#ffffff80;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+html[data-theme=dark] body nav.dock{background:linear-gradient(135deg,#ffffff08,transparent 65%),rgba(32,34,40,.68)!important;border-color:#ffffff30}
+html body nav.dock .dock-indicator{background:rgba(70,75,90,.12);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+html[data-theme=dark] body nav.dock .dock-indicator{background:rgba(210,220,240,.13);border-color:rgba(255,255,255,.10)}
 html body .dock-item{color:#353943}html[data-theme=dark] body .dock-item{color:#f0f1f4}html body .dock-item.active,html body .dock-item[aria-expanded=true]{color:#215acb}html[data-theme=dark] body .dock-item.active,html[data-theme=dark] body .dock-item[aria-expanded=true]{color:#8abaff}
-html body .search-dialog{background:linear-gradient(135deg,#ffffff30,transparent 65%),rgba(245,247,251,.88);backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
-html[data-theme=dark] body .search-dialog{background:linear-gradient(135deg,#ffffff08,transparent 65%),rgba(25,27,33,.86);color:#f6f7fa}
+html body dialog.search-dialog{background:linear-gradient(135deg,#ffffff20,transparent 65%),rgba(245,247,251,.78)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+html[data-theme=dark] body dialog.search-dialog{background:linear-gradient(135deg,#ffffff0c,transparent 65%),rgba(32,35,43,.62)!important;color:#f6f7fa}
 html[data-theme=dark] body .search-dialog .search-input{background:rgba(255,255,255,.08);color:#fff;border-color:#ffffff26}.search-dialog .search-input::placeholder{color:#646a77;opacity:1}html[data-theme=dark] .search-dialog .search-input::placeholder{color:#b9bfcd;opacity:1}html[data-theme=dark] .search-dialog .search-result{color:#f6f7fa}html[data-theme=dark] .search-dialog .search-result small{color:#c5cada}
 html body .catalog-toolbar .sort-trigger{border-radius:999px}
 .category-indicator{transition:transform .38s cubic-bezier(.22,1,.36,1),width .3s,height .3s}
