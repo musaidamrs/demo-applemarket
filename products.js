@@ -26,7 +26,8 @@ const products = [
       "Внешний дисплей": "5,4″ Super Retina XDR",
       "Процессор": "Apple A20 Pro",
       "Камеры": "Dual Fusion 48 Мп",
-      "Связь": "eSIM"
+      "Связь": "eSIM",
+      "SIM (версия США)": "Dual eSIM; без физической SIM"
     },
     "availability": "Анонсирован · продажи Apple с 23 октября",
     "source": "https://www.apple.com/shop/buy-iphone/iphone-duo",
@@ -43,7 +44,12 @@ const products = [
         "iphone-duo-night-sky-back.jpg",
         "iphone-duo-night-sky-detail.jpg"
       ]
-    ]
+    ],
+    "highlights": [
+      "A20 Pro · 256 ГБ–2 ТБ",
+      "Dual eSIM · версия США"
+    ],
+    "specSource": "https://www.apple.com/iphone-duo/specs/"
   },
   {
     "id": "iphone-18-pro",
@@ -68,7 +74,8 @@ const products = [
       "Дисплей": "6,3″ Super Retina XDR",
       "Процессор": "Apple A20 Pro",
       "Камеры": "Pro Fusion 48 Мп",
-      "Корпус": "Алюминиевый unibody"
+      "Корпус": "Алюминиевый unibody",
+      "SIM (версия США)": "Dual eSIM; без физической SIM"
     },
     "source": "https://www.apple.com/iphone-18-pro/",
     "gallery": [
@@ -102,7 +109,12 @@ const products = [
       "iphone-18-pro-glacier-full.png",
       "iphone-18-pro-silver-full.png",
       "iphone-18-pro-black-full.png"
-    ]
+    ],
+    "highlights": [
+      "A20 Pro · дисплей 6,3″",
+      "Dual eSIM · версия США"
+    ],
+    "specSource": "https://www.apple.com/iphone-18-pro/specs/"
   },
   {
     "id": "macbook-air",
@@ -127,7 +139,8 @@ const products = [
       "Процессор": "Apple M5",
       "Дисплей": "13,6″ Liquid Retina",
       "Линейка": "13″ и 15″",
-      "Операционная система": "macOS"
+      "Операционная система": "macOS",
+      "Объединённая память": "От 16 ГБ; конфигурации до 32 ГБ"
     },
     "source": "https://www.apple.com/macbook-air/",
     "gallery": [
@@ -161,7 +174,12 @@ const products = [
       "mac-silver-full.jpg",
       "mac-starlight-full.jpg",
       "mac-midnight-full.jpg"
-    ]
+    ],
+    "highlights": [
+      "Apple M5 · дисплей 13,6″",
+      "От 16 ГБ объединённой памяти"
+    ],
+    "specSource": "https://www.apple.com/macbook-air/specs/"
   },
   {
     "id": "airpods-pro",
@@ -179,7 +197,8 @@ const products = [
       "Поколение": "AirPods Pro 3",
       "Шумоподавление": "Активное",
       "Датчик": "Измерение пульса",
-      "Футляр": "Зарядка через USB-C"
+      "Футляр": "Зарядка через USB-C",
+      "Чип": "Apple H2"
     },
     "source": "https://www.apple.com/airpods-pro/",
     "gallery": [
@@ -191,7 +210,12 @@ const products = [
     ],
     "colorImages": [
       "airpods-front.png"
-    ]
+    ],
+    "highlights": [
+      "Чип H2 · шумоподавление",
+      "MagSafe · USB-C"
+    ],
+    "specSource": "https://www.apple.com/airpods-pro/specs/"
   },
   {
     "id": "ipad-air",
@@ -217,7 +241,8 @@ const products = [
       "Процессор": "Apple M4",
       "Дисплей": "11″ Liquid Retina",
       "Линейка": "11″ и 13″",
-      "Операционная система": "iPadOS"
+      "Операционная система": "iPadOS",
+      "Объединённая память": "12 ГБ"
     },
     "source": "https://www.apple.com/ipad-air/",
     "gallery": [
@@ -243,7 +268,12 @@ const products = [
       "ipad-purple-front.jpg",
       "ipad-starlight-front.jpg",
       "ipad-spacegray-front.jpg"
-    ]
+    ],
+    "highlights": [
+      "Apple M4 · дисплей 11″",
+      "12 ГБ объединённой памяти"
+    ],
+    "specSource": "https://www.apple.com/ipad-air/specs/"
   },
   {
     "id": "apple-watch",
@@ -263,7 +293,9 @@ const products = [
       "Модель": "Apple Watch Series 12",
       "Материал": "Алюминий",
       "Совместимость": "iPhone",
-      "Операционная система": "watchOS"
+      "Операционная система": "watchOS",
+      "Чип": "Apple S11",
+      "Встроенная память": "64 ГБ"
     },
     "source": "https://www.apple.com/apple-watch-series-12/",
     "gallery": [
@@ -287,6 +319,11 @@ const products = [
       "watch-black-view-0.jpg",
       "watch-light-gold-view-0.jpg",
       "watch-dark-bronze-view-0.jpg"
-    ]
+    ],
+    "highlights": [
+      "Чип S11 · 64 ГБ",
+      "Дисплей Always-On Retina"
+    ],
+    "specSource": "https://www.apple.com/apple-watch-series-12/specs/"
   }
 ];
