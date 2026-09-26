@@ -284,8 +284,13 @@ html body .second-row .portrait-banner{width:100%;max-width:none;aspect-ratio:3/
 /* Navigation and search need a stable contrast layer over product photography. */
 html body nav.dock{background:linear-gradient(135deg,#ffffff18,transparent 65%),rgba(230,233,239,.78)!important;border-color:#ffffff80;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
 html[data-theme=dark] body nav.dock{background:linear-gradient(135deg,#ffffff08,transparent 65%),rgba(32,34,40,.68)!important;border-color:#ffffff30}
-html body nav.dock .dock-indicator{background:rgba(70,75,90,.12);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
-html[data-theme=dark] body nav.dock .dock-indicator{background:rgba(210,220,240,.13);border-color:rgba(255,255,255,.10)}
+/* Flat, neutral translucent selection in the desktop and mobile navigation. */
+:root{--nav-selection:rgba(0,0,0,.15);--nav-hover:rgba(0,0,0,.10)}
+:root[data-theme=dark]{--nav-selection:rgba(0,0,0,.30);--nav-hover:rgba(0,0,0,.22)}
+html body nav.dock .dock-indicator{background:var(--nav-selection);border:0;box-shadow:none}
+html body nav.dock .dock-item:hover{background:var(--nav-hover);box-shadow:none}
+html body .menu-dialog nav a:hover{background:var(--nav-hover);box-shadow:none}
+html body .menu-dialog nav a:is(.active,[aria-current=page]){background:var(--nav-selection);box-shadow:none}
 html body .dock-item{color:#353943}html[data-theme=dark] body .dock-item{color:#f0f1f4}html body .dock-item.active,html body .dock-item[aria-expanded=true]{color:#215acb}html[data-theme=dark] body .dock-item.active,html[data-theme=dark] body .dock-item[aria-expanded=true]{color:#8abaff}
 html body dialog.search-dialog{background:linear-gradient(135deg,#ffffff20,transparent 65%),rgba(245,247,251,.78)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
 html[data-theme=dark] body dialog.search-dialog{background:linear-gradient(135deg,#ffffff0c,transparent 65%),rgba(32,35,43,.62)!important;color:#f6f7fa}
