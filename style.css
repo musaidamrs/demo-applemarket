@@ -280,3 +280,18 @@ html body .second-row .portrait-banner{width:100%;max-width:none;aspect-ratio:3/
 .watch-banner img{width:86%;left:7%;height:46%;bottom:22%;object-fit:cover;border-radius:24px;background:#fff}.card-details p{font-size:13px}@media(max-width:1199px){.cards .card-details p{font-size:12px}}
 
 @media(min-width:1024px){:root{--side:max(48px,calc((100vw - 1600px)/2 + 48px))}.header [data-open=search-dialog]{left:var(--side)}.header-actions{right:var(--side)}}@media(min-width:1024px) and (max-width:1423px){:root{--side:28px}}
+
+/* Navigation and search need a stable contrast layer over product photography. */
+html body .dock{background:linear-gradient(135deg,#ffffff55,transparent 65%),rgba(250,251,253,.84);border-color:#ffffffb3;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+html[data-theme=dark] body .dock{background:linear-gradient(135deg,#ffffff08,transparent 65%),rgba(32,32,37,.88);border-color:#ffffff25}
+html body .dock-item{color:#353943}html[data-theme=dark] body .dock-item{color:#f0f1f4}html body .dock-item.active,html body .dock-item[aria-expanded=true]{color:#215acb}html[data-theme=dark] body .dock-item.active,html[data-theme=dark] body .dock-item[aria-expanded=true]{color:#8abaff}
+html body .search-dialog{background:linear-gradient(135deg,#ffffff30,transparent 65%),rgba(245,247,251,.88);backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+html[data-theme=dark] body .search-dialog{background:linear-gradient(135deg,#ffffff08,transparent 65%),rgba(25,27,33,.86);color:#f6f7fa}
+html[data-theme=dark] body .search-dialog .search-input{background:rgba(255,255,255,.08);color:#fff;border-color:#ffffff26}.search-dialog .search-input::placeholder{color:#646a77;opacity:1}html[data-theme=dark] .search-dialog .search-input::placeholder{color:#b9bfcd;opacity:1}html[data-theme=dark] .search-dialog .search-result{color:#f6f7fa}html[data-theme=dark] .search-dialog .search-result small{color:#c5cada}
+html body .catalog-toolbar .sort-trigger{border-radius:999px}
+.category-indicator{transition:transform .38s cubic-bezier(.22,1,.36,1),width .3s,height .3s}
+html body .product-buy{width:100%;min-height:50px;flex-shrink:0}.product-buy button{height:50px;min-width:56px}.product-buy .buy-initial{font-size:15px}.product-buy>span{flex:1;text-align:center;font-size:19px}
+html body .product-layout{width:100%;max-width:none;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch}.product-layout>*{min-width:0}.product-gallery{position:relative;top:0;align-self:start}.product-copy{align-self:stretch}
+html body .specs{width:100%;max-width:none;margin:28px 0 0;box-sizing:border-box}.spec-row>*{min-width:0;overflow-wrap:anywhere}
+@media(max-width:1023px){html body .product-layout{grid-template-columns:minmax(0,1fr);gap:20px}.product-gallery{width:100%}.product-photo{width:100%;max-height:none}.product-copy{width:100%}}@media(max-width:760px){html body .specs{margin-top:22px}}
+@media(prefers-reduced-motion:reduce){.category-indicator{transition:none}}
